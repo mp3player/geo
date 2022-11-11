@@ -2,62 +2,25 @@
 #include <iostream>
 
 
-bool shader(const char * const code , unsigned int type , unsigned int & shader){
-    shader = glCreateShader(type);
-    glShaderSource(shader, 1, &code,NULL);
-    glCompileShader(shader);
-    int status;
-    char info[512];
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
-    if (!status) {
-        glGetShaderInfoLog(shader, 512, NULL, info);
-        std::cout << info << std::endl;
-        return false;
-    }
-    return true;
-}
-
-
-
-Window::Window( int width , int height , int x , int y ) : width( width ) , height( height ) , x( x ) , y( y ) {
+Window::Window( int width , int height , int x , int y ) 
+: width( width ) 
+, height( height ) 
+, x( x ) 
+, y( y )
+ {
     if( !glfwInit() ) inited = false;
     else inited = true;
     this->valid = this->createWindow();
-    this->valid = this->valid && this->createShader();
+    this->program = new Program("./assets/vertex.vert" , "./assets/fragment.frag");
+    this->program->compile();
 }
 
 Window::~Window(){
+    if( program != nullptr ){
+        delete program;
+    }
     this->clearAllCache();
     this->destoryWindow();
-}
-
-bool Window::createShader(){
-    unsigned int vertexShader ;
-    unsigned int fragmentShader;
-    bool res = shader( VERTEX_SHADER , GL_VERTEX_SHADER , vertexShader );
-    res = res && shader( FRAGMENT_SHADER , GL_FRAGMENT_SHADER , fragmentShader );
-
-    if( !res ){
-        std::cout << "create shader failed " << std::endl;
-        return res;
-    }
-    this->program = glCreateProgram();
-    glAttachShader( program , vertexShader );
-    glAttachShader( program , fragmentShader );
-
-    glLinkProgram( program );
-
-    int status;
-    char info[512];
-    glGetProgramiv(program, GL_LINK_STATUS, &status);
-    if (!status) {
-        glGetProgramInfoLog(program, 512, NULL, info);
-        return false;
-    }
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return true;
 }
 
 bool Window::createWindow(){
@@ -91,43 +54,19 @@ void Window::destoryWindow(){
     glfwTerminate();
 }
 
-void Window::draw( Shape * shape ){
-    
-    // draw 
-    // CacheData data;
-    // bool cached = this->getCache( shape , data );
-
-    // if( !cached ){
-    //     data = this->makeCache( shape );
-    // }
-
-    // glDrawArrays(GL_LINE_LOOP , 0 , data.count );
-
-    // glUseProgram( this->program );
-    // unsigned int wLoc = glGetUniformLocation(this->program , "width");
-    // unsigned int hLoc = glGetUniformLocation(this->program , "height");
-    // glUniform1f(wLoc , width );
-    // glUniform1f(hLoc , height);
-
-
-    for( Shape * s : shape->children ){
-        this->draw( s );
-    }
-}
-
 void Window::draw( Shape * shape , Style * style ){
+
     // draw 
     CacheData data;
     bool cached = this->getCache( shape , data );
 
     if( !cached ){
         data = this->makeCache( shape );
-        
     }
 
-    glUseProgram( this->program );
-    unsigned int wLoc = glGetUniformLocation(this->program , "width");
-    unsigned int hLoc = glGetUniformLocation(this->program , "height");
+    glUseProgram( this->program->program );
+    unsigned int wLoc = glGetUniformLocation(this->program->program , "width");
+    unsigned int hLoc = glGetUniformLocation(this->program->program , "height");
     glUniform1f(wLoc , width );
     glUniform1f(hLoc , height);
 
@@ -148,6 +87,7 @@ void Window::draw( Shape * shape , Style * style ){
     glDrawArrays( type , 0 , data.count );
 
     glBindVertexArray(0);
+
 
 }
 

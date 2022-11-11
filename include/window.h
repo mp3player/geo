@@ -6,24 +6,7 @@
 #include <unordered_map>
 #include <shape.h>
 #include <style.h>
-
-
-#define VERTEX_SHADER \ 
-"#version 330 core \n" \
-"precision mediump float; \n" \
-"uniform float width;\n" \
-"uniform float height;\n" \
-"layout(location=0) in vec2 position; \n" \
-"void main(){ \n" \
-"\tgl_Position = vec4(position / vec2( width , height ) , 0.0f , 1.0f); \n" \ 
-"} \n"
-
-#define FRAGMENT_SHADER \
-"#version 330 core \n"\
-"precision mediump float; \n" \
-"void main(){ \n" \
-"\tgl_FragColor = vec4(1.0f,1.0f, 1.0f , 1.0f);\n" \
-"}"
+#include <program.h>
 
 
 class Window {
@@ -43,7 +26,7 @@ public:
     bool inited ;
     bool visible ;
     bool valid ;
-    unsigned int program;
+    Program * program = nullptr;
 
     std::unordered_map< Shape * , CacheData > caches;
 
@@ -53,13 +36,9 @@ public:
 
     ~Window();
 
-    bool createShader();
-
     bool createWindow();
 
     void destoryWindow();
-
-    void draw( Shape * shape );
 
     void draw( Shape * shape , Style * style );
 

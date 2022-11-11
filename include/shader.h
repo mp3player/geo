@@ -13,13 +13,14 @@ public:
     unsigned int type ;
 
     std::string code;
-    
+
     unsigned int shader;
 
     bool valid = false;
 
     bool shaderStatus = false ;
 
+    // TODO : use enum to represent the message
     std::string shaderInfo = "not inited";
 
     explicit Shader( std::string path , unsigned int type );
@@ -27,6 +28,8 @@ public:
     ~Shader();
 
 public:
+
+    void setStatus( bool status , std::string info );
 
     void compile( );
 

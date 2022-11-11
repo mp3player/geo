@@ -1,4 +1,6 @@
-void main(){
+#version 330 core
+precision mediump float;
 
-    gl_FragCoord
+void main(){
+    gl_FragColor = vec4(1.0f,1.0f, 1.0f , 1.0f);
 }
