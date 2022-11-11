@@ -9,8 +9,11 @@
 class Shader {
 
 public:
+
     unsigned int type ;
+
     std::string code;
+    
     unsigned int shader;
 
     bool valid = false;

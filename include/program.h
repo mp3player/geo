@@ -6,7 +6,9 @@
 class Program {
 
 public:
+
     Shader * vertexShader;
+    
     Shader * fragmentShader;
 
     unsigned int program;

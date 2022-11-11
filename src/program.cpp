@@ -6,18 +6,23 @@ Program::Program( std::string vpath , std::string fpath )
 fragmentShader( new Shader( fpath , GL_FRAGMENT_SHADER ) ) {}
 
 Program::~Program(){
+
     this->deleteProgram();
+
 }
 
 
 void Program::compile(){
+
     if( !vertexShader->shaderStatus || !fragmentShader->shaderStatus ){
         vertexShader->compile();
         fragmentShader->compile();
     }
+
 }
 
 void Program::deleteProgram(){
+
     if( this->vertexShader->shaderStatus ){
         delete vertexShader;
     }
@@ -27,4 +32,5 @@ void Program::deleteProgram(){
     if( glIsProgram( this->program ) ){
         glDeleteProgram( this->program );
     }
+    
 }
