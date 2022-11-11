@@ -5,11 +5,14 @@ Shader::Shader( std::string path , unsigned int type ) : type( type ) {
     std::ifstream ifs( path , std::ios::in );
     if( !ifs.is_open() ){
         // do nothing 
+        shaderInfo = "load code failed";
     }else{
         std::stringstream ss;
         ss << ifs.rdbuf() ;
         std::string code = ss.str();
+        shaderInfo = "shader isn't compiled";
     }
+    shaderStatus = false;
 }
 
 Shader::~Shader(){
@@ -22,7 +25,7 @@ void Shader::compile(){
         this->deleteShader();
     }
 
-    if( this->code.size() <0 ) {
+    if( this->code.size() < 0 ) {
         this->shaderStatus = false;
         this->shaderInfo = "no code";
         return;

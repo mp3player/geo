@@ -15,9 +15,9 @@ public:
 
     bool valid = false;
 
-    bool shaderStatus;
+    bool shaderStatus = false ;
 
-    std::string shaderInfo;
+    std::string shaderInfo = "not inited";
 
     explicit Shader( std::string path , unsigned int type );
 
