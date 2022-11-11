@@ -83,8 +83,9 @@ void Window::draw( Shape * shape , Style * style ){
     }
 
 
+    glPointSize(10.0f);
     glBindVertexArray( data.vao );
-    glDrawArrays( type , 0 , data.count );
+    glDrawArrays( GL_POINTS , 0 , data.count );
 
     glBindVertexArray(0);
 

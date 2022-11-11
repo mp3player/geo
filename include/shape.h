@@ -22,7 +22,7 @@ struct Vector2f {
 
     Vector2f operator * (float s);
 
-    friend Vector2f operator * ( float s , Vector2f v);
+    friend Vector2f operator * ( float s , Vector2f v );
 
     float length();
 

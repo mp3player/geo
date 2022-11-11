@@ -17,20 +17,31 @@ struct Style {
 };
 
 struct PointStyle : Style {
+
     float pointSize;
+
     explicit PointStyle();
+
     std::string getType();
+
 };
 
 struct LineStyle : Style {
+
     float lineWidth;
+
     explicit LineStyle();
+
     std::string getType();
+
 };
 
 struct FaceStyle : Style {
+
     explicit FaceStyle();
+
     std::string getType();
+    
 };
 
 #endif

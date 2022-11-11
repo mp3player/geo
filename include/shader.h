@@ -9,6 +9,17 @@
 class Shader {
 
 public:
+    enum ShaderStatus {
+        NO_CODE ,           // no code
+        NO_FILE ,           // no shader file
+        NOT_INITED ,        // don't read shader file
+        NOT_COMPILED ,      // don't compile the shader program
+        DELETED ,           // shader has been deleted
+        ERROR ,             // error
+        OK 
+    };
+
+public:
 
     unsigned int type ;
 
@@ -20,6 +31,8 @@ public:
 
     bool shaderStatus = false ;
 
+    ShaderStatus status = NOT_INITED;
+
     // TODO : use enum to represent the message
     std::string shaderInfo = "not inited";
 
@@ -29,11 +42,15 @@ public:
 
 public:
 
-    void setStatus( bool status , std::string info );
+    bool getStatus();
+
+    void setStatus( ShaderStatus status , std::string info );
 
     void compile( );
 
     void deleteShader();
+
+    
 
 };
 

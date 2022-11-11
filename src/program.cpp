@@ -26,10 +26,12 @@ void Program::compile(){
     vertexShader->compile();
     fragmentShader->compile();
 
-    if( !vertexShader->shaderStatus || !fragmentShader->shaderStatus ){
+    if( !vertexShader->getStatus() || !fragmentShader->getStatus() ){
         this->setStatus( false , "shader error" );
         return ;
     }
+
+    
 
     this->program = glCreateProgram();
     glAttachShader( program , this->vertexShader->shader );
@@ -50,10 +52,10 @@ void Program::compile(){
 
 void Program::deleteProgram(){
 
-    if( this->vertexShader->shaderStatus ){
+    if( this->vertexShader->getStatus() ){
         delete vertexShader;
     }
-    if( this->fragmentShader->shaderStatus ){
+    if( this->fragmentShader->getStatus() ){
         delete fragmentShader;
     }
     if( glIsProgram( this->program ) ){

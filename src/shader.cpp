@@ -4,35 +4,38 @@
 
 Shader::Shader( std::string path , unsigned int type ) : type( type ) {
     std::ifstream ifs( path , std::ios::in );
-    std::string info ;
     if( !ifs.is_open() ){
-        info = "load code failed";
+        this->setStatus( NO_FILE , "load code failed");
     }else{
         std::stringstream ss;
         ss << ifs.rdbuf() ;
         this->code = ss.str();
-        info = "shader isn't compiled";
+        this->setStatus( NOT_COMPILED , "shader isn't compiled" );
     }
-    this->setStatus( false , info );
+    ifs.close();
 }
 
 Shader::~Shader(){
     this->deleteShader();
 }
 
-void Shader::setStatus( bool status , std::string info ){
-    this->shaderStatus = status ;
+bool Shader::getStatus(){
+    return this->status == OK;
+}
+
+void Shader::setStatus( ShaderStatus status , std::string info ){
+    this->status = status ;
     this->shaderInfo = info;
 }
 
 void Shader::compile(){
     
-    if( this->shaderStatus == true ){
+    if( this->getStatus() ){
         this->deleteShader();
     }
 
     if( this->code.size() < 0 ) {
-        this->setStatus( false , "no code" );
+        this->setStatus( NO_CODE , "no code" );
         return;
     }
 
@@ -42,25 +45,25 @@ void Shader::compile(){
     glShaderSource( this->shader, 1 , &c , NULL);
     glCompileShader( this->shader );
 
-    int status ;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
+    int compileStatus ;
+    glGetShaderiv(shader, GL_COMPILE_STATUS, &compileStatus);
 
-    if( !status ){
+    if( !compileStatus ){
 
         char info[512];
         glGetShaderInfoLog(shader, 512, NULL, info);
         
         std::string detailInfo = ( ( this->type == GL_VERTEX_SHADER ) ? "Vertex : " : "Fragment : ") + std::string( info );
-        this->setStatus( status , detailInfo );
+        this->setStatus( ERROR , detailInfo );
         std::cout << detailInfo << std::endl;
         return ;
     }
-    this->setStatus( true , "OK" );
+    this->setStatus( OK , "OK" );
 }
 
 void Shader::deleteShader( ){
     if( glIsShader( this->shader ) ){
         glDeleteShader( this->shader );
-        this->setStatus( false , "deleted" );
+        this->setStatus( DELETED , "deleted" );
     }
 }
