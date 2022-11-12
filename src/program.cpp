@@ -14,12 +14,10 @@ Program::~Program(){
 
 }
 
-
 void Program::setStatus( bool status , std::string info ){
     this->programStatus = status;
     this->programInfo = info;
 }
-
 
 void Program::compile(){
 
@@ -30,8 +28,6 @@ void Program::compile(){
         this->setStatus( false , "shader error" );
         return ;
     }
-
-    
 
     this->program = glCreateProgram();
     glAttachShader( program , this->vertexShader->shader );
