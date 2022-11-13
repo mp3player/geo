@@ -20,6 +20,4 @@ bool pointInPolygon( Vector2f p , std::vector< Vector2f > ps );
 
 bool pointInCircle( Vector2f p , Vector2f center , float radius );
 
-//--------------------------------
-
 #endif
