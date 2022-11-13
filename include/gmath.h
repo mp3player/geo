@@ -9,6 +9,17 @@
 
 // random Vector
 float randFloat( float min = 0.0f , float max = 1.0f );
+
 std::vector< Vector2f > randVector2f( int count , float min = 0.0f , float max = 1.0f );
+
+// checkout whether the point in the shape , 2-d condition
+
+bool pointInLine( Vector2f p , Vector2f start , Vector2f end , float eps = 1e-6 );
+
+bool pointInPolygon( Vector2f p , std::vector< Vector2f > ps );
+
+bool pointInCircle( Vector2f p , Vector2f center , float radius );
+
+
 
 #endif

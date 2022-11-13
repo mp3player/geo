@@ -5,17 +5,15 @@
 Program::Program( std::string vpath , std::string fpath ) {
     this->vertexShader = new Shader( vpath , GL_VERTEX_SHADER ) ;
     this->fragmentShader = new Shader( fpath , GL_FRAGMENT_SHADER );
-    this->setStatus( false , "not compile" );
+    this->setStatus( Shader::NOT_COMPILED , "not compile" );
 }
 
 Program::~Program(){
-
     this->deleteProgram();
-
 }
 
-void Program::setStatus( bool status , std::string info ){
-    this->programStatus = status;
+void Program::setStatus( Status status , std::string info ){
+    this->status = status;
     this->programInfo = info;
 }
 
@@ -25,7 +23,7 @@ void Program::compile(){
     fragmentShader->compile();
 
     if( !vertexShader->getStatus() || !fragmentShader->getStatus() ){
-        this->setStatus( false , "shader error" );
+        this->setStatus( Shader::ERROR , "shader error" );
         return ;
     }
 
@@ -39,11 +37,11 @@ void Program::compile(){
     if( !status ){
         char info[512];
         glGetProgramInfoLog( this->program , 512 , NULL , info );
-        this->setStatus( status , info );
+        this->setStatus( Shader::ERROR , info );
         std::cout << info << std::endl;
         return ;
     }
-    this->setStatus( status , "OK" );
+    this->setStatus( Shader::OK , "OK" );
 }
 
 void Program::deleteProgram(){
@@ -58,6 +56,6 @@ void Program::deleteProgram(){
         glDeleteProgram( this->program );
     }
 
-    this->setStatus( false , "deleted" );
+    this->setStatus( Shader::DELETED , "deleted" );
 
 }

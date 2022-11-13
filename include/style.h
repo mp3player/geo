@@ -4,15 +4,21 @@
 #include <string>
 
 struct Color {
+    
     float r , g , b , a ;
+
     explicit Color( float r = 1.0f , float g = 1.0f , float b = 1.0f , float a = 1.0f );
+
 };
 
 struct Style {
+
     Color * color;
     
     explicit Style();
+
     virtual ~Style();
+
     virtual std::string getType();
 };
 

@@ -26,6 +26,8 @@ struct Vector2f {
 
     float length();
 
+    float squareLength();
+
     float dot( Vector2f v );
 
     bool operator == (Vector2f v);
@@ -57,6 +59,8 @@ struct Shape {
     void add( Shape * child );
 
     virtual std::vector< Vector2f > getPoints();
+
+    virtual std::vector< unsigned int > getIndexes();
 
 };
 
@@ -93,7 +97,6 @@ struct Polygon : Shape {
     std::vector< Vector2f > getPoints();
 
 };
-
 
 
 

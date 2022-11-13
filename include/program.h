@@ -3,6 +3,8 @@
 
 #include <shader.h>
 
+using Status = Shader::ShaderStatus;
+
 class Program {
 
 public:
@@ -13,7 +15,7 @@ public:
 
     unsigned int program;
 
-    bool programStatus;
+    Status status;
 
     std::string programInfo;
 
@@ -23,7 +25,7 @@ public:
 
 public:
 
-    void setStatus( bool status , std::string info );
+    void setStatus( Status status , std::string info );
 
     void compile();
 

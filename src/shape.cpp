@@ -32,6 +32,10 @@ float Vector2f::length(){
     return std::sqrt( this->x * this->x + this->y * this->y );
 }
 
+float Vector2f::squareLength(){
+    return this->x * this->x + this->y * this->y;
+}
+
 float Vector2f::dot( Vector2f v ){
     return this->x * v.x + this->y * v.y;
 }
@@ -67,6 +71,10 @@ void Shape::add( Shape * child ){
 
 std::vector< Vector2f > Shape::getPoints(){
     return std::vector< Vector2f >();
+}
+
+std::vector< unsigned int > Shape::getIndexes(){
+    return std::vector< unsigned int >();
 }
 
 // Rectangle
