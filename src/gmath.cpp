@@ -137,7 +137,6 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
 
     }
 
-    
     while( !s.empty() ){
         result.push_back( s.top() );
         s.pop();
