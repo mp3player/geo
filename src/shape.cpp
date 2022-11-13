@@ -1,6 +1,5 @@
 #include <shape.h>
 #include <cmath>
-#include <iostream>
 
 // Vector2
 
@@ -44,6 +43,11 @@ bool Vector2f::operator == (Vector2f v){
     return (this->x == v.x) && (this->y == v.y) ;
 }
 
+std::ostream & operator << ( std::ostream & cout , Vector2f v ){
+    cout << v.x << " " << v.y ;
+    return cout;
+}
+
 // Vector3
 
 Vector3f::Vector3f( float x , float y , float z ) :x(x) , y(y) , z(z) {}
@@ -57,6 +61,11 @@ Vector3f Vector3f::cross( Vector3f v ){
     float z = this->x * v.y - this->y * v.x;
 
     return Vector3f(x,y,z);
+}
+
+std::ostream & operator << ( std::ostream & cout , Vector3f v ){
+    cout << v.x << " " << v.y << " " << v.z ;
+    return cout;
 }
 
 // Shape

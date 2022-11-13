@@ -74,18 +74,22 @@ void Window::draw( Shape * shape , Style * style ){
     GLenum type = GL_POINTS;
     
     if( style->getType() == "line" ){
-        type = GL_LINE_LOOP;
+
         LineStyle * lStyle = (LineStyle *)style;
+        type = GL_LINE_STRIP ;// ? lStyle->closed : GL_LINE_STRIP;
         glLineWidth( lStyle->lineWidth );
+
     }else{
+        
         PointStyle * pStyle = (PointStyle *)style;
         glPointSize(pStyle->pointSize);
+
     }
 
 
-    glPointSize(10.0f);
+
     glBindVertexArray( data.vao );
-    glDrawArrays( GL_POINTS , 0 , data.count );
+    glDrawArrays( type , 0 , data.count );
 
     glBindVertexArray(0);
 

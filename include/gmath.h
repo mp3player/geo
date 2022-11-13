@@ -20,4 +20,11 @@ bool pointInPolygon( Vector2f p , std::vector< Vector2f > ps );
 
 bool pointInCircle( Vector2f p , Vector2f center , float radius );
 
+// convex
+// BF algorithm
+// optimization algorithm
+
+std::vector< Vector2f > getConvex( std::vector< Vector2f > points );
+
+
 #endif

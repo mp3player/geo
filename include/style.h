@@ -36,6 +36,8 @@ struct LineStyle : Style {
 
     float lineWidth;
 
+    bool closed;
+
     explicit LineStyle();
 
     std::string getType();

@@ -2,6 +2,7 @@
 #define _SHAPE_H_
 
 #include <vector>
+#include <iostream>
 
 struct Vector2f ;
 struct Vector3f ;
@@ -32,6 +33,8 @@ struct Vector2f {
 
     bool operator == (Vector2f v);
 
+    friend std::ostream & operator << ( std::ostream & cout , Vector2f v );
+
 };
 
 struct Vector3f {
@@ -43,6 +46,8 @@ struct Vector3f {
     Vector3f( const Vector2f & v);
 
     Vector3f cross( Vector3f v );
+
+    friend std::ostream && operator << ( std::ostream && cout , Vector3f v );
 
 };
 

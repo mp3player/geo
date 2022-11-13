@@ -26,7 +26,7 @@ std::string PointStyle::getType(){
 
 // line
 
-LineStyle::LineStyle() : Style() , lineWidth( 1.0f ) {}
+LineStyle::LineStyle() : Style() , lineWidth( 1.0f ) , closed( false ) {}
 
 std::string LineStyle::getType(){
     return "line";
