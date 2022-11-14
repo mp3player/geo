@@ -5,6 +5,7 @@
 #include <iostream>
 
 struct Vector2f ;
+
 struct Vector3f ;
 
 struct Vector2f {
@@ -102,7 +103,6 @@ struct Polygon : Shape {
     std::vector< Vector2f > getPoints();
 
 };
-
 
 
 

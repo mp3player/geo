@@ -57,7 +57,7 @@ bool pointInCircle( Vector2f p , Vector2f center , float radius ){
 
 // convex
 // BF algorithm
-// optimization algorithm
+// semi-optimization algorithm
 
 std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
     // BF algorithm pseudo code
@@ -71,8 +71,8 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
     };
     std::vector< Vector2f >::iterator begin = points.begin();
     std::vector< Vector2f >::iterator end = points.end();
-
-    std::sort( begin , end , comparer );
+    
+    std::sort<std::vector<Vector2f>::iterator , std::function< bool(Vector2f , Vector2f) >>( begin , end , comparer );
 
     // compute the turning direction
     std::function< bool( Vector2f , Vector2f , Vector2f ) > turning = [](Vector2f p0 , Vector2f p1 , Vector2f p2){

@@ -14,6 +14,8 @@ add_executable(
     src/shader.cpp
     src/program.cpp
     
+    src/bst.cpp
+
     src/gmath.cpp
     src/convex.cpp
     src/style.cpp
