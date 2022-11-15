@@ -1,8 +1,12 @@
 #include <iostream>
+#include <functional>
+
 #include <window.h>
 #include <gmath.h>
 #include <program.h>
+#include <bst.h>
 
+typedef std::function< bool(Vector2f , Vector2f ) >  Comparer;
 
 int main(){
     // 随机种子 
@@ -12,13 +16,42 @@ int main(){
 
     std::vector< Vector2f > vertices = randVector2f(10 , -400.0f , 400.0f);
 
-    std::cout << std::endl;
+    
+    Comparer comparer = []( Vector2f v0 , Vector2f v1 ){
+        return v0.x < v1.x;
+    };
 
-    std::vector< Vector2f > convex = getConvex( vertices );
+    BinaryTree< Vector2f , Comparer> tree = BinaryTree< Vector2f , Comparer >( comparer );
+
+    // tree.add( Vector2f(59));
+    // tree.add( Vector2f(49));
+    // tree.add( Vector2f(7));
+    // tree.add( Vector2f(82));
+    // tree.add( Vector2f(84));
+    // tree.add( Vector2f(4));
+    // tree.add( Vector2f(22));
+    // tree.add( Vector2f(71));
+
+    // tree.add( Vector2f(10));
+    // tree.add( Vector2f(47));
+    // tree.add( Vector2f(23));
+    // tree.add( Vector2f(48));
+
+    // tree.inOrder();
+
+    // std::cout << std::endl;
+
+    // tree.remove( Vector2f(59));
+
+    // tree.inOrder();
+
+    // std::cout << tree.depth() << std::endl;
 
 
-    Polygon * p = new Polygon( vertices );
-    Polygon * pc = new Polygon( convex );
+    // std::vector< Vector2f > convex = getConvex( vertices );
+
+    // Polygon * p = new Polygon( vertices );
+    // Polygon * pc = new Polygon( convex );
 
     PointStyle * pStyle = new PointStyle();
     pStyle->pointSize = 10.0f;
@@ -33,16 +66,16 @@ int main(){
     while( !glfwWindowShouldClose( window.frame ) ){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        window.draw( p , pStyle );
+        // window.draw( p , pStyle );
 
-        window.draw( pc , lStyle );
+        // window.draw( pc , lStyle );
 
         glfwPollEvents();
         glfwSwapBuffers( window.frame );
     }
 
-    delete pc;
-    delete p;
+    // delete pc;
+    // delete p;
     delete pStyle;
     delete lStyle;
 
