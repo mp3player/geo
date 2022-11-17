@@ -16,6 +16,7 @@ add_executable(
     
     src/bst.cpp
     src/avl.cpp
+    src/rbtree.cpp
 
     src/gmath.cpp
     src/convex.cpp

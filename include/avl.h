@@ -65,7 +65,7 @@ bool AVLTree<T , _Comp>::remove( T value ){
     // rebalace from the leaves of the tree
 
 
-    // rotate => remove 
+    // rotate => remove => rebalance
 
     return false;
 
@@ -209,7 +209,8 @@ void AVLTree< T , _Comp >::rebalance( typename BinaryTree< T , _Comp >::Node * n
             std::cout << "error" << std::endl;
         }
     }else{
-        std::cout << 123 << std::endl;
+        // balanced 
+        //std::cout << 123 << std::endl;
     }
 
 }
