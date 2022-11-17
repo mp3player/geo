@@ -5,47 +5,56 @@
 #include <gmath.h>
 #include <program.h>
 #include <bst.h>
+#include <avl.h>
 
-typedef std::function< bool(Vector2f , Vector2f ) >  Comparer;
+
 
 int main(){
+
+    using Comparer = std::function< bool(Vector2f , Vector2f ) >  ;
+
+    Comparer comparer = []( Vector2f v0 , Vector2f v1 ){
+        return v0.x < v1.x;;
+    };
+
+    AVLTree< Vector2f , Comparer> tree = AVLTree< Vector2f , Comparer >( comparer );
+
+    tree.add( Vector2f(4));
+    tree.add( Vector2f(7));
+    tree.add( Vector2f(10));
+    tree.add( Vector2f(22));
+    tree.add( Vector2f(23));
+    tree.add( Vector2f(47));
+    tree.add( Vector2f(48));
+    tree.add( Vector2f(49));
+    tree.add( Vector2f(59));
+    tree.add( Vector2f(71));
+    tree.add( Vector2f(82));
+    tree.add( Vector2f(84));
+
+    std::cout << std::endl;
+
+    tree.preOrder();
+    tree.inOrder();
+
+    tree.remove(Vector2f(59));
+
+    tree.preOrder();
+    tree.inOrder();
+
+    std::cout << std::endl;
+
+    /*
+
     // 随机种子 
     srand(time(NULL));
 
-    Window window = Window(800,800,400,100);
+    // Window window = Window(800,800,400,100);
 
     std::vector< Vector2f > vertices = randVector2f(10 , -400.0f , 400.0f);
 
     
-    Comparer comparer = []( Vector2f v0 , Vector2f v1 ){
-        return v0.x < v1.x;
-    };
-
-    BinaryTree< Vector2f , Comparer> tree = BinaryTree< Vector2f , Comparer >( comparer );
-
-    // tree.add( Vector2f(59));
-    // tree.add( Vector2f(49));
-    // tree.add( Vector2f(7));
-    // tree.add( Vector2f(82));
-    // tree.add( Vector2f(84));
-    // tree.add( Vector2f(4));
-    // tree.add( Vector2f(22));
-    // tree.add( Vector2f(71));
-
-    // tree.add( Vector2f(10));
-    // tree.add( Vector2f(47));
-    // tree.add( Vector2f(23));
-    // tree.add( Vector2f(48));
-
-    // tree.inOrder();
-
-    // std::cout << std::endl;
-
-    // tree.remove( Vector2f(59));
-
-    // tree.inOrder();
-
-    // std::cout << tree.depth() << std::endl;
+    
 
 
     // std::vector< Vector2f > convex = getConvex( vertices );
@@ -78,6 +87,8 @@ int main(){
     // delete p;
     delete pStyle;
     delete lStyle;
+
+    */
 
     return 0;
 }

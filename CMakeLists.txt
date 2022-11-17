@@ -15,6 +15,7 @@ add_executable(
     src/program.cpp
     
     src/bst.cpp
+    src/avl.cpp
 
     src/gmath.cpp
     src/convex.cpp
