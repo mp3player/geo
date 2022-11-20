@@ -19,7 +19,6 @@ add_executable(
     src/rbtree.cpp
 
     src/gmath.cpp
-    src/convex.cpp
     src/style.cpp
     src/shape.cpp
     src/window.cpp

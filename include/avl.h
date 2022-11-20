@@ -61,13 +61,25 @@ template< typename T , typename _Comp >
 bool AVLTree<T , _Comp>::remove( T value ){
 
     // remove => rebalance
-    bool result = BinaryTree< T , _Comp >::remove( value );
-    // rebalace from the leaves of the tree
+    typename BinaryTree< T , _Comp >::Node * target;
+    bool hasValue = BinaryTree< T , _Comp >::find(value , & target);
+    
+    if( !hasValue ){
+        return false;
+    }
 
+    bool hasRemoved = BinaryTree< T , _Comp >::remove( value );
+
+    // rebalance the target.parent
+    this->rebalance( target );
+
+    return hasRemoved;
+
+    // TODO 
+    // rebalace from the leaves of the tree
+    
 
     // rotate => remove => rebalance
-
-    return false;
 
 }
 

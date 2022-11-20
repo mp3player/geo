@@ -88,19 +88,15 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
     };
 
     // the result of the function 
-
     std::vector< Vector2f > result = std::vector< Vector2f >();
 
     // traverse the whole points to get the half hull
-
     std::stack< Vector2f > s ;
 
     std::function< void(void) > handler = [ & ](){
-        
         while( s.size() >= 3 ){
 
             // test the point in the stach that whether if satisfy the properties
-
             Vector2f p2 = s.top();
             s.pop();
 
@@ -113,28 +109,20 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
             bool direction = turning( p0 , p1 , p2 );
 
             if( direction ){
-
                 s.push( p0 );
                 s.push( p1 );
                 s.push( p2 );
-
                 break;
-
             }else{
-
                 s.push( p0 );
                 s.push( p2 );
-
             }
         }
     };
 
     for( int i = 0 ; i < points.size() ; ++ i ){
-
         s.push( points.at(i) );
-
         handler();
-
     }
 
     while( !s.empty() ){
@@ -146,7 +134,6 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
 
     for( int i = points.size() - 1 ; i >= 0 ; --i ){
         s.push( points.at(i) );
-
         handler();
     }
 
@@ -155,7 +142,32 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
         s.pop();
     }
 
-
     return result;
 
 }
+
+// line segment intersection test
+// sweep line algorithm
+
+
+void intersection(){
+    // a event queue , Q : AVLTree
+    // 
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -26,5 +26,9 @@ bool pointInCircle( Vector2f p , Vector2f center , float radius );
 
 std::vector< Vector2f > getConvex( std::vector< Vector2f > points );
 
+// line segment intersection test
+// sweep line algorithm
+void intersection();
+
 
 #endif

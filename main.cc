@@ -6,43 +6,82 @@
 #include <program.h>
 #include <bst.h>
 #include <avl.h>
+#include <rbtree.h>
 
 
 
 int main(){
+    /*
+    using Comparer = std::function< bool(float , float ) >  ;
 
-    using Comparer = std::function< bool(Vector2f , Vector2f ) >  ;
-
-    Comparer comparer = []( Vector2f v0 , Vector2f v1 ){
-        return v0.x < v1.x;;
+    Comparer comparer = []( float v0 , float v1 ){
+        return v0 < v1;
     };
 
-    AVLTree< Vector2f , Comparer> tree = AVLTree< Vector2f , Comparer >( comparer );
+    RBTree< float , Comparer> tree = RBTree< float , Comparer >( comparer );
+    tree.add(49);
+    tree.add( 4);
+    tree.add( 7);
+    tree.add(10);
+    tree.add(22);
+    tree.add(23);
+    tree.add(47);
+    tree.add(48);
 
-    tree.add( Vector2f(4));
-    tree.add( Vector2f(7));
-    tree.add( Vector2f(10));
-    tree.add( Vector2f(22));
-    tree.add( Vector2f(23));
-    tree.add( Vector2f(47));
-    tree.add( Vector2f(48));
-    tree.add( Vector2f(49));
-    tree.add( Vector2f(59));
-    tree.add( Vector2f(71));
-    tree.add( Vector2f(82));
-    tree.add( Vector2f(84));
+    tree.add(59);
+    tree.add(71);
+    tree.add(82);
+    tree.add(84);
 
     std::cout << std::endl;
 
     tree.preOrder();
     tree.inOrder();
 
-    tree.remove(Vector2f(59));
+    tree.remove(59);
 
     tree.preOrder();
     tree.inOrder();
 
     std::cout << std::endl;
+    */
+    std::function< void(float) > handler = [](float v){
+        std::cout << v << " ";
+    };
+    using Comparer = std::function< bool(float , float ) >  ;
+
+    Comparer comparer = []( float v0 , float v1 ){
+        return v0 < v1;
+    };
+
+    AVLTree< float , Comparer> tree = AVLTree< float , Comparer >( comparer );
+
+    tree.add(4);
+    tree.add(7);
+    tree.add(10);
+    tree.add(22);
+    tree.add(23);
+    tree.add(47);
+    tree.add(48);
+    tree.add(49);
+    tree.add(59);
+    tree.add(71);
+    tree.add(82);
+    tree.add(84);
+
+    std::cout << std::endl;
+
+    tree.preOrder( handler );
+    tree.inOrder( handler );
+
+    tree.remove(59);
+
+    tree.preOrder( handler );
+    tree.inOrder( handler );
+
+    std::cout << std::endl;
+
+
 
     /*
 

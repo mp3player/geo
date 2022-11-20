@@ -55,9 +55,9 @@ protected:
 
 public:
 
-    void preOrder( );
+    virtual void preOrder( std::function< void(T) > handler );
 
-    void inOrder( );
+    virtual void inOrder( std::function< void(T) > handler );
     
 
 };
@@ -309,18 +309,17 @@ bool BinaryTree<T , _Comp >::find( T value , Node ** result ){
 //traverse 
 
 template<typename T , typename _Comp >
-void BinaryTree<T , _Comp >::preOrder( ){
+void BinaryTree<T , _Comp >::preOrder( std::function< void(T) > handler ){
 
     std::function< void( Node * ) > traverse;
     traverse = [&]( Node * node ){
 
         if( node != nullptr ){
-            
-            std::cout << node->value.x << " ";
+            std::cout << ( this->depth( node->left ) - this->depth( node->right ) ) << " ";
+            // handler( node->value );
             traverse( node->left );
             traverse( node->right );
 
-        
         };
 
     };
@@ -331,7 +330,7 @@ void BinaryTree<T , _Comp >::preOrder( ){
 }
 
 template<typename T , typename _Comp >
-void BinaryTree<T , _Comp >::inOrder( ){
+void BinaryTree<T , _Comp >::inOrder( std::function< void(T) > handler ){
 
     std::function< void( Node * ) > traverse;
     traverse = [&]( Node * node ){
@@ -339,7 +338,8 @@ void BinaryTree<T , _Comp >::inOrder( ){
         if( node != nullptr ){
 
             traverse( node->left );
-            std::cout << node->value.x << " ";
+            // handler( node->value );
+            std::cout << ( this->depth( node->left ) - this->depth( node->right ) ) << " ";
             traverse( node->right );
 
         
