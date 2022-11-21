@@ -14,7 +14,7 @@ struct Vector2f {
 
     explicit Vector2f( float x = 0 , float y = 0 );
 
-    explicit Vector2f( const Vector3f & v );
+    Vector2f( const Vector3f & v );
 
     Vector2f operator + (Vector2f v);
 
@@ -32,6 +32,8 @@ struct Vector2f {
 
     float dot( Vector2f v );
 
+    Vector2f normalization();
+
     bool operator == (Vector2f v);
 
     friend std::ostream & operator << ( std::ostream & cout , Vector2f v );
@@ -46,7 +48,23 @@ struct Vector3f {
 
     Vector3f( const Vector2f & v);
 
+    Vector3f operator + (Vector3f v);
+
+    Vector3f operator - (Vector3f v);
+
+    Vector3f operator * (Vector3f v);
+
+    Vector3f operator * (float s);
+
+    friend Vector3f operator * ( float s , Vector3f v );
+
     Vector3f cross( Vector3f v );
+
+    float length();
+
+    float dot( Vector3f v );
+
+    Vector3f normalization( );
 
     friend std::ostream && operator << ( std::ostream && cout , Vector3f v );
 
@@ -104,6 +122,12 @@ struct Polygon : Shape {
 
 };
 
+struct LineSegment : Shape {
+    Vector2f upper;
+    Vector2f lower;
+    explicit LineSegment( Vector2f v0 , Vector2f v1 );
+    std::vector< Vector2f > getPoints();
+};
 
 
 #endif

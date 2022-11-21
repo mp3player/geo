@@ -7,10 +7,31 @@
 #include <bst.h>
 #include <avl.h>
 #include <rbtree.h>
-
+#include <heap.h>
 
 
 int main(){
+    typedef std::function< bool(float,float)> _Comp;
+    _Comp _comp = [](float a, float b){ return a - b > 0; };
+
+    Heap< float , _Comp >heap = Heap<float , _Comp >( _comp , 10 );
+
+    for( int i = 0 ; i < 15 ; ++ i ){
+        float v = randFloat();
+        heap.add( v );
+        std::cout << v << " " ;
+    }
+    std::cout << std::endl;
+
+    std::cout << heap._size << std::endl;
+
+    while( heap._size > 0 ){
+        float v ;
+        bool res = heap.pop(v);
+        if( res ) std::cout  << v << " ";
+    }
+    std::cout << std::endl;
+
     /*
     using Comparer = std::function< bool(float , float ) >  ;
 
@@ -45,6 +66,8 @@ int main(){
 
     std::cout << std::endl;
     */
+
+   /*
     std::function< void(float) > handler = [](float v){
         std::cout << v << " ";
     };
@@ -80,7 +103,7 @@ int main(){
     tree.inOrder( handler );
 
     std::cout << std::endl;
-
+*/
 
 
     /*
@@ -88,44 +111,55 @@ int main(){
     // 随机种子 
     srand(time(NULL));
 
-    // Window window = Window(800,800,400,100);
+    Window window = Window(800,800,400,100);
 
-    std::vector< Vector2f > vertices = randVector2f(10 , -400.0f , 400.0f);
-
-    
-    
-
-
-    // std::vector< Vector2f > convex = getConvex( vertices );
-
-    // Polygon * p = new Polygon( vertices );
-    // Polygon * pc = new Polygon( convex );
-
-    PointStyle * pStyle = new PointStyle();
-    pStyle->pointSize = 10.0f;
-
-    LineStyle * lStyle = new LineStyle();
-    lStyle->closed = true;
-    lStyle->lineWidth = 2.0f;
+    LineStyle * redStyle = new LineStyle();
+    redStyle->lineWidth = 10;
+    LineStyle * greenStyle = new LineStyle();
 
     glClearColor(0.0f,0.0f,0.0f,1.0f);
     glEnable(GL_DEPTH_TEST);
 
+    LineStyle * style = redStyle;
+    
+    int k = 0;
     while( !glfwWindowShouldClose( window.frame ) ){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        // window.draw( p , pStyle );
 
-        // window.draw( pc , lStyle );
+        {
+            std::vector<Vector2f> v0 = randVector2f(2 , -400,400);
+            std::vector<Vector2f> v1 = randVector2f(2 , -400,400);
+
+            LineSegment * l0 = new LineSegment(v0.at(0),v0.at(1));
+            LineSegment * l1 = new LineSegment(v1.at(0),v1.at(1));
+
+
+            bool intersected = isLineSegmentIntersected( l0 , l1 );
+            std::cout << "intersected : " << intersected << std::endl;
+            if( intersected ){
+                style = redStyle;
+            }else{
+                style = greenStyle;
+            }
+
+            window.draw(l0,style);
+            window.draw(l1,style);
+
+            // delete l0;delete l1;
+        }
+    
 
         glfwPollEvents();
         glfwSwapBuffers( window.frame );
+
+        glfwSwapInterval(50);
+        
     }
 
-    // delete pc;
-    // delete p;
-    delete pStyle;
-    delete lStyle;
+
+    delete redStyle;
+    delete greenStyle;
+
 
     */
 

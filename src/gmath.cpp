@@ -3,6 +3,11 @@
 #include <algorithm>
 #include <functional>
 #include <stack>
+#include <queue>
+#include <list>
+#include <avl.h>
+#include <functional>
+#include <algorithm>
 
 
 float randFloat(float min , float max){
@@ -149,11 +154,28 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
 // line segment intersection test
 // sweep line algorithm
 
+bool isLineSegmentIntersected( LineSegment * l0 , LineSegment * l1 ){
+    // compute vector 
+    Vector3f v0( l1->upper - l0->lower );
+    Vector3f v1( l0->upper - l1->upper );
+    Vector3f v2( l1->lower - l0->upper );
+    Vector3f v3( l0->lower - l1->lower );
 
-void intersection(){
-    // a event queue , Q : AVLTree
-    // 
+    Vector3f c0 = v0.cross(v1);
+    Vector3f c1 = v1.cross(v2);
+    Vector3f c2 = v2.cross(v3);
+    Vector3f c3 = v3.cross(v0);
 
+    float c0z = c0.z ;
+    float c1z = c1.z ;
+    float c2z = c2.z ;
+    float c3z = c3.z ;
+
+    if( c0z > 0 && c1z > 0 & c2z > 0 && c3z > 0 || c0z < 0 && c1z < 0 & c2z < 0 && c3z < 0 ){
+        return true;
+    }
+    return false;
+    
 }
 
 

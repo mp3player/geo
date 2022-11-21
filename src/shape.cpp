@@ -39,6 +39,15 @@ float Vector2f::dot( Vector2f v ){
     return this->x * v.x + this->y * v.y;
 }
 
+Vector2f Vector2f::normalization(){
+    float len = this->length();
+    if( len == 0 ){
+        return *this;
+    }else{
+        return *this * ( 1.0f / len );
+    }
+}
+
 bool Vector2f::operator == (Vector2f v){
     return (this->x == v.x) && (this->y == v.y) ;
 }
@@ -54,6 +63,26 @@ Vector3f::Vector3f( float x , float y , float z ) :x(x) , y(y) , z(z) {}
 
 Vector3f::Vector3f( const Vector2f & v ) : x(v.x) , y(v.y) , z(1.0f) {}
 
+Vector3f Vector3f::operator + (Vector3f v){
+    return Vector3f( this->x + v.x , this->y + v.y , this->z + v.z );
+}
+
+Vector3f Vector3f::operator - (Vector3f v){
+    return Vector3f( this->x - v.x , this->y - v.y , this->z - v.z );
+}
+
+Vector3f Vector3f::operator * (Vector3f v){
+    return Vector3f( this->x * v.x , this->y * v.y , this->z * v.z );
+}
+
+Vector3f Vector3f::operator * (float s){
+    return Vector3f( this->x * s , this->y * s , this->z * s );
+}
+
+Vector3f operator * ( float s , Vector3f v ){
+    return v.operator*(s);
+}
+
 Vector3f Vector3f::cross( Vector3f v ){
     // this x v
     float x = this->y * v.z - this->z * v.y;
@@ -61,6 +90,22 @@ Vector3f Vector3f::cross( Vector3f v ){
     float z = this->x * v.y - this->y * v.x;
 
     return Vector3f(x,y,z);
+}
+
+float Vector3f::length(){
+    return std::hypot( this->x , this->y , this->z );
+}
+
+float Vector3f::dot( Vector3f v ){
+    return this->x * v.x + this->y * v.y + this->z * v.z;
+}
+
+Vector3f Vector3f::normalization(){
+    float len = this->length();
+    if( len == 0 ){
+        return *this;
+    }
+    return *this * ( 1.0f / len );
 }
 
 std::ostream & operator << ( std::ostream & cout , Vector3f v ){
@@ -128,4 +173,22 @@ Polygon::Polygon( std::vector<Vector2f> vertices) : Shape(){
 std::vector< Vector2f > Polygon::getPoints(){
     return this->vertices;
 }
+
+// LineSegment
+
+LineSegment::LineSegment( Vector2f v0 , Vector2f v1 ){
+    if( v0.y < v1.y ){
+        this->upper = v1;
+        this->lower = v0;
+    }else{
+        this->upper = v0;
+        this->lower = v1;
+    }
+}
+
+std::vector<Vector2f> LineSegment::getPoints(){
+    return std::vector<Vector2f> { this->upper , this->lower };
+}
+
+
 
