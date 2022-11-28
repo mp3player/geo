@@ -119,11 +119,12 @@ void Heap<T , _Comp>::shiftDown( int index ){
     if( cIndex >= _size ) return ;
     
     // the right child is greater
-    if( cIndex + 1 < _size && this->_comp( datum[cIndex + 1] , datum[cIndex] ) ){
+    if( cIndex + 1 < _size && this->_comp( datum[cIndex] , datum[cIndex + 1] ) ){
         cIndex += 1;
     }
 
-    if( this->_comp( datum[cIndex] , datum[index] ) ){
+    // the child is greater
+    if( this->_comp( datum[index] , datum[cIndex] ) ){
         std::swap( datum[index] , datum[cIndex] );
         this->shiftDown( cIndex );
     }
@@ -135,7 +136,8 @@ void Heap<T , _Comp>::shiftUp( int index ){
     if( index <= 0) return ;
 
     int pIndex = ( index - 1 ) / 2;
-    if( this->_comp( datum[index] , datum[pIndex] ) ){
+    // the child is greater 
+    if( this->_comp( datum[pIndex] , datum[index] ) ){
 
         // swap the parent with the child
         // shiftUp

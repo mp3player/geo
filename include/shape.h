@@ -4,8 +4,25 @@
 #include <vector>
 #include <iostream>
 #include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 
 struct Shape {
+
+    float rotation = 0.0f ;
+
+    glm::vec2 scale = glm::vec2(1.0f , 1.0f);
+
+    glm::mat3 transform = glm::mat3(1.0f);
+
+    glm::mat3 inverseTransform = glm::mat3(1.0f);
+
+    glm::mat3 worldTransform = glm::mat3(1.0f);
+
+    glm::mat3 inverseWorldTransform = glm::mat3(1.0f);
+
+    bool transformNeededUpdate = true;
+
+    bool shapeNeededUpdaate = true;
 
     std::vector< Shape * > children;
 
@@ -20,6 +37,12 @@ struct Shape {
     virtual std::vector< glm::vec2 > getPoints();
 
     virtual std::vector< unsigned int > getIndexes();
+
+    virtual void updateWorldTransform( glm::mat3 );
+
+    virtual void updateTransform( );
+
+    virtual void rotate( float );
 
 };
 

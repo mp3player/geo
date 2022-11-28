@@ -12,7 +12,16 @@
 
 int main(){
 
+    // std::vector< LineSegment * > lines ;
+    // for( int i = 0 ; i < 4 ; ++ i ){
+    //     LineSegment * line = randLine(-400,400);
+    //     lines.push_back( line );
+    // }
+
+    // sweepLineAlgorithm( lines );
+
     
+    // /*
 
     // 随机种子 
     srand(time(NULL));
@@ -27,23 +36,25 @@ int main(){
     glEnable(GL_DEPTH_TEST);
 
     LineStyle * style = redStyle;
+                LineSegment * l0 = randLine(-400,400);
+            LineSegment * l1 = randLine(-400,400);
     
     int k = 0;
     while( !glfwWindowShouldClose( window.frame ) ){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         {
-            LineSegment * l0 = randLine(-400,400);
-            LineSegment * l1 = randLine(-400,400);
 
 
-            bool intersected = isLineSegmentIntersected( l0 , l1 );
-            std::cout << "intersected : " << intersected << std::endl;
-            if( intersected ){
-                style = redStyle;
-            }else{
-                style = greenStyle;
-            }
+
+            // bool intersected = isLineSegmentIntersected( l0 , l1 );
+            // std::cout << "intersected : " << intersected << std::endl;
+            // if( intersected ){
+            //     style = redStyle;
+            // }else{
+            //     style = greenStyle;
+            // }
+            l0->rotate(.01f);
 
             window.draw(l0,style);
             window.draw(l1,style);
@@ -55,7 +66,7 @@ int main(){
         glfwPollEvents();
         glfwSwapBuffers( window.frame );
 
-        glfwSwapInterval(50);
+        glfwSwapInterval(1);
         
     }
 
@@ -64,7 +75,7 @@ int main(){
     delete greenStyle;
 
 
-    
+    // */
 
     return 0;
 }

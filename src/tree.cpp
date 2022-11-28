@@ -70,14 +70,14 @@ inline TreeNode<T>* AVL<T, _Comp>::add(T value)
 	Node* p = node;
 	while (node != nullptr) {
 		p = node;
-		if (this->_comp(value, node->value) <= 0) {
+		if (this->_comp(value, node->value) >= 0) {
 			node = node->left;
 		}
 		else {
 			node = node->right;
 		}
 	}
-	if (this->_comp(value, p->value) <= 0) {
+	if (this->_comp(value, p->value) >= 0) {
 		p->left = newNode;
 		newNode->parent = p;
 	}
@@ -97,7 +97,7 @@ TreeNode<T>* AVL<T, _Comp>::find(T value)
 		if (this->_comp(node->value , value ) == 0) {
 			return node;
 		}
-		if (this->_comp(value, node->value) < 0) {
+		if (this->_comp(value, node->value) > 0) {
 			node = node->left;
 		}
 		else {

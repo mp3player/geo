@@ -1,8 +1,10 @@
 #version 330 core
 precision mediump float;
 
-out vec4 color;
+uniform vec3 color;
+
+// out vec4 fcolor;
 
 void main(){
-    color = vec4( 1.0f );
+    gl_FragColor = vec4( color , 1.0f );
 }

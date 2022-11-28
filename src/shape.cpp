@@ -19,6 +19,32 @@ std::vector< unsigned int > Shape::getIndexes(){
     return std::vector< unsigned int >();
 }
 
+void Shape::updateWorldTransform( glm::mat3 world ){
+    this->worldTransform = world * this->transform;
+    this->inverseWorldTransform = glm::inverse( this->worldTransform );
+    for( Shape * shape : children ){
+        shape->updateWorldTransform( this->worldTransform );
+    }
+}
+
+void Shape::updateTransform( ){
+    // apply rotate , 
+    // apply scale
+    // apply translate
+    glm::mat4 transform = glm::mat4(1.0f);
+    transform = glm::rotate( transform , this->rotation , glm::vec3(0.0f,0.0f,1.0f) );
+    transform = glm::scale( transform , glm::vec3(this->scale,1.0f));
+    transform = glm::translate( transform , glm::vec3(this->center , 0.0f) );
+
+    this->transform = glm::mat3(transform);
+    this->inverseTransform = glm::inverse( this->transform );
+}
+
+void Shape::rotate( float a ){
+    this->rotation += a;
+    this->updateTransform();
+}
+
 // Rectangle
 
 Rectangle::Rectangle( float width , float height , float x , float y ) : size( width , height ) , Shape( x , y ) {}

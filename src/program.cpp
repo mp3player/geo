@@ -1,6 +1,6 @@
 #include <program.h>
 #include <iostream>
-#include <glm/ext.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 
 Program::Program( std::string vpath , std::string fpath ) {

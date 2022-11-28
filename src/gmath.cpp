@@ -254,6 +254,162 @@ bool getIntersectedPoint(LineSegment* l0, LineSegment* l1 , glm::vec2 & point )
     }
 }
 
+// status内会存储line 和 intersection point
+// 查找status会查看line是不是同一条
+// 添加会通过point来查询
+void sweepLineAlgorithm( std::vector< LineSegment * > segments ){
+    enum EventType { UNKNOW , END , INTERCTION };
 
+    struct Line {
+        glm::vec2 point;
+        glm::vec2 interior ;
+        LineSegment * line ;
+        Line( glm::vec2 point , LineSegment * line ) : line( line ) , point( point ) , interior( point ) { }
+    };
+
+    struct Event {
+        glm::vec2 point;
+        Event( glm::vec2 point ) : point( point ) { }
+        virtual EventType getType() { return UNKNOW; }
+    };
+
+    struct EndEvent : Event {
+        LineSegment * line ;
+        bool isUpper ;
+        EndEvent( glm::vec2 point , LineSegment * line , bool isUpper ) : Event( point ) , line( line ) , isUpper( isUpper ) { }
+        EventType getType(){ return END; }
+    };
+
+    struct InterEvent : Event {
+        LineSegment * left ;
+        LineSegment * right;
+        InterEvent( LineSegment * left , LineSegment * right , glm::vec2 point ) : Event( point ) , left( left ) , right( right ) {}
+        EventType getType() { return INTERCTION; }
+    };
+
+    // smaller than
+    typedef std::function< int( Line * , Line * ) > _StatusComp ;
+    typedef std::function< bool( Event * , Event * ) > _QueueComp;
+    typedef TreeNode< Line * > Node;
+
+    _StatusComp sComp = []( Line * l0, Line * l1) {
+        if( l0->line == l1->line ) return 0;
+        if( l0->interior.x < l1->interior.x ) return 1;
+        return -1;
+    };
+
+    _QueueComp qComp = []( Event * e0 , Event * e1 ){
+        if( e0->point.y < e1->point.y ) return true;
+        return false;
+    };
+
+    AVL< Line * , _StatusComp > status( sComp );
+    Heap< Event * , _QueueComp > queue( qComp );
+
+
+    for( LineSegment * line : segments ) {
+        std::cout << "upper " << line->upper.y << std::endl;
+        std::cout << "lower " << line->lower.y << std::endl;
+        EndEvent * upper = new EndEvent(line->upper , line , true);
+        EndEvent * lower = new EndEvent(line->lower , line , false);
+        queue.add( upper );
+        queue.add( lower );
+    }
+
+    // 测试是否相交
+    // 找到邻接线
+    std::function< Node*(Node *) > findLeft = [](Node * node ){
+        if( node->parent == nullptr ){
+            return node->left;
+        } else if ( node == node->parent->left ){
+            return node->left;
+        }else {
+            return node->parent ;
+        }
+    };
+
+    std::function< Node*(Node *) > findRight = []( Node * node ){
+        if( node->parent == nullptr ){
+            return node->right;
+        }else if ( node == node->parent->right ){
+            return node->right;
+        }else {
+            return node->parent;
+        }
+    };
+
+    // 处理事件
+    std::function< void(Node *) > pUpper = [&]( Node * node ){
+        
+        Node * left = findLeft( node );
+        Node * right = findRight( node );
+        glm::vec2 point ;
+
+        if( left != nullptr ){
+            bool intersected = getIntersectedPoint( node->value->line , left->value->line , point );
+            if( intersected ){
+                if( point.y < node->value->interior.y ){
+                    InterEvent * iEvent = new InterEvent(left->value->line , node->value->line , point);
+                    queue.add( iEvent );
+                }
+            }
+        }
+
+        if( right != nullptr ){
+            bool intersected = getIntersectedPoint( node->value->line , right->value->line , point );
+            if( intersected ){
+                if( point.y < node->value->interior.y ){
+                    InterEvent * iEvent = new InterEvent( node->value->line , right->value->line , point );
+                    queue.add( iEvent );
+                }
+            }
+        }
+
+    };  
+
+    std::function< void(Node *) > pLower = [&]( Node * node ){
+        Node * left = findLeft( node );
+        Node * right = findRight( node );
+        if( left == nullptr || right == nullptr ) return ;
+        glm::vec2 point;
+        bool intersected = getIntersectedPoint(left->value->line , right->value->line , point);
+        if( intersected ){
+            if( point.y < node->value->point.y ){
+                InterEvent * iEvent = new InterEvent( left->value->line , right->value->line , point );
+                queue.add( iEvent );
+            }
+        }
+        
+    };
+
+    std::function< void(InterEvent *) > pInter = [&](InterEvent * iEvent){
+        
+    };
+
+    while( !queue.empty() ){
+        Event * event;
+        bool result = queue.pop( event );
+        
+        if(!result ){
+            std::cout << "pop error " << std::endl;
+            return ;
+        }
+
+        switch ( event->getType() ){
+            case END : {
+
+            }break;
+            case INTERCTION : {
+
+            }break;
+            case UNKNOW : {
+
+            }break;
+        }
+
+    }
+
+
+}
 
 

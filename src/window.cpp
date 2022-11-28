@@ -66,10 +66,11 @@ void Window::draw( Shape * shape , Style * style ){
     }
 
     glUseProgram( this->program->program );
-    unsigned int wLoc = glGetUniformLocation(this->program->program , "width");
-    unsigned int hLoc = glGetUniformLocation(this->program->program , "height");
-    glUniform1f(wLoc , width );
-    glUniform1f(hLoc , height);
+
+    this->program->setUniform("width" , float( this->width ) );
+    this->program->setUniform("height", float( this->height ) );
+    this->program->setUniform("transform" , shape->transform );
+
 
     // style
     unsigned int mode = this->setStyle( style );
@@ -181,7 +182,6 @@ unsigned int Window::setStyle( Style * style ){
         }
     }
 }
-
 
 
 
