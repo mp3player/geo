@@ -67,7 +67,7 @@ int main(){
         glfwSwapBuffers( window.frame );
 
         glfwSwapInterval(1);
-        
+
     }
 
 
