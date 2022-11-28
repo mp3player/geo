@@ -1,130 +1,18 @@
 #include <shape.h>
 #include <cmath>
 
-// Vector2
-
-Vector2f::Vector2f( float x , float y ) : x(x) , y(y) {}
-
-Vector2f::Vector2f( const Vector3f & v ) : x(v.x) , y(v.y) {}
-
-Vector2f Vector2f::operator + (Vector2f v){
-    return Vector2f( this->x + v.x , this->y + v.y );
-}
-
-Vector2f Vector2f::operator - (Vector2f v){
-    return Vector2f( this->x - v.x , this->y - v.y );
-}
-
-Vector2f Vector2f::operator * (Vector2f v){
-    return Vector2f( this->x * v.x , this->y - v.y );
-}
-
-Vector2f Vector2f::operator * (float s){
-    return Vector2f( s * this->x , s * this->y );
-}
-
-Vector2f operator * ( float s , Vector2f v){
-    return s * v;
-}
-
-float Vector2f::length(){
-    return std::sqrt( this->x * this->x + this->y * this->y );
-}
-
-float Vector2f::squareLength(){
-    return this->x * this->x + this->y * this->y;
-}
-
-float Vector2f::dot( Vector2f v ){
-    return this->x * v.x + this->y * v.y;
-}
-
-Vector2f Vector2f::normalization(){
-    float len = this->length();
-    if( len == 0 ){
-        return *this;
-    }else{
-        return *this * ( 1.0f / len );
-    }
-}
-
-bool Vector2f::operator == (Vector2f v){
-    return (this->x == v.x) && (this->y == v.y) ;
-}
-
-std::ostream & operator << ( std::ostream & cout , Vector2f v ){
-    cout << v.x << " " << v.y ;
-    return cout;
-}
-
-// Vector3
-
-Vector3f::Vector3f( float x , float y , float z ) :x(x) , y(y) , z(z) {}
-
-Vector3f::Vector3f( const Vector2f & v ) : x(v.x) , y(v.y) , z(1.0f) {}
-
-Vector3f Vector3f::operator + (Vector3f v){
-    return Vector3f( this->x + v.x , this->y + v.y , this->z + v.z );
-}
-
-Vector3f Vector3f::operator - (Vector3f v){
-    return Vector3f( this->x - v.x , this->y - v.y , this->z - v.z );
-}
-
-Vector3f Vector3f::operator * (Vector3f v){
-    return Vector3f( this->x * v.x , this->y * v.y , this->z * v.z );
-}
-
-Vector3f Vector3f::operator * (float s){
-    return Vector3f( this->x * s , this->y * s , this->z * s );
-}
-
-Vector3f operator * ( float s , Vector3f v ){
-    return v.operator*(s);
-}
-
-Vector3f Vector3f::cross( Vector3f v ){
-    // this x v
-    float x = this->y * v.z - this->z * v.y;
-    float y = this->z * v.x - this->x * v.z;
-    float z = this->x * v.y - this->y * v.x;
-
-    return Vector3f(x,y,z);
-}
-
-float Vector3f::length(){
-    return std::hypot( this->x , this->y , this->z );
-}
-
-float Vector3f::dot( Vector3f v ){
-    return this->x * v.x + this->y * v.y + this->z * v.z;
-}
-
-Vector3f Vector3f::normalization(){
-    float len = this->length();
-    if( len == 0 ){
-        return *this;
-    }
-    return *this * ( 1.0f / len );
-}
-
-std::ostream & operator << ( std::ostream & cout , Vector3f v ){
-    cout << v.x << " " << v.y << " " << v.z ;
-    return cout;
-}
-
 // Shape
 
 Shape::Shape( float x , float y ) : center( x , y ) {}
 
-Shape::Shape( Vector2f center ) : center( center ) {}
+Shape::Shape( glm::vec2 center ) : center( center ) {}
 
 void Shape::add( Shape * child ){
     this->children.push_back( child );
 }
 
-std::vector< Vector2f > Shape::getPoints(){
-    return std::vector< Vector2f >();
+std::vector< glm::vec2 > Shape::getPoints(){
+    return std::vector< glm::vec2 >();
 }
 
 std::vector< unsigned int > Shape::getIndexes(){
@@ -135,25 +23,25 @@ std::vector< unsigned int > Shape::getIndexes(){
 
 Rectangle::Rectangle( float width , float height , float x , float y ) : size( width , height ) , Shape( x , y ) {}
 
-std::vector< Vector2f > Rectangle::getPoints(){
-    Vector2f p0 = Vector2f( this->center );
-    Vector2f p1 = Vector2f( this->center.x + this->size.x , this->center.y );
-    Vector2f p2 = Vector2f( this->center.x + this->size.x , this->center.y + this->size.y );
-    Vector2f p3 = Vector2f( this->center.x , this->center.y + this->size.y );
+std::vector< glm::vec2 > Rectangle::getPoints(){
+    glm::vec2 p0 = glm::vec2( this->center );
+    glm::vec2 p1 = glm::vec2( this->center.x + this->size.x , this->center.y );
+    glm::vec2 p2 = glm::vec2( this->center.x + this->size.x , this->center.y + this->size.y );
+    glm::vec2 p3 = glm::vec2( this->center.x , this->center.y + this->size.y );
 
-    return std::vector< Vector2f >{ p0 , p1 , p2 , p3 };
+    return std::vector< glm::vec2 >{ p0 , p1 , p2 , p3 };
 }
 
 // Circle
 
 Circle::Circle( float radius , float x , float y ) : radius( radius ) , Shape( center ) {}
 
-std::vector< Vector2f > Circle::getPoints(){
-    std::vector< Vector2f > points;
+std::vector< glm::vec2 > Circle::getPoints(){
+    std::vector< glm::vec2 > points;
     for(float i = 0 ; i < 2 * M_PI ; i += .01f){
         float x = this->radius * cos( i );
         float y = this->radius * sin( i );
-        points.push_back( Vector2f{x,y} );
+        points.push_back( glm::vec2{x,y} );
     }
     return points;
 }
@@ -162,21 +50,21 @@ std::vector< Vector2f > Circle::getPoints(){
 
 Polygon::Polygon() : Shape() {}
 
-Polygon::Polygon( std::vector<Vector2f> vertices) : Shape(){
-    this->vertices = std::vector< Vector2f >();
-    for( Vector2f & v : vertices ){
-        this->vertices.push_back( Vector2f{v.x,v.y} );
+Polygon::Polygon( std::vector<glm::vec2> vertices ) : Shape(){
+    this->vertices = std::vector< glm::vec2 >();
+    for( glm::vec2 & v : vertices ){
+        this->vertices.push_back( glm::vec2{v.x,v.y} );
     }
     
 }
 
-std::vector< Vector2f > Polygon::getPoints(){
+std::vector< glm::vec2 > Polygon::getPoints(){
     return this->vertices;
 }
 
 // LineSegment
 
-LineSegment::LineSegment( Vector2f v0 , Vector2f v1 ){
+LineSegment::LineSegment( glm::vec2 v0 , glm::vec2 v1 ){
     if( v0.y < v1.y ){
         this->upper = v1;
         this->lower = v0;
@@ -186,8 +74,8 @@ LineSegment::LineSegment( Vector2f v0 , Vector2f v1 ){
     }
 }
 
-std::vector<Vector2f> LineSegment::getPoints(){
-    return std::vector<Vector2f> { this->upper , this->lower };
+std::vector<glm::vec2> LineSegment::getPoints(){
+    return std::vector<glm::vec2> { this->upper , this->lower };
 }
 
 

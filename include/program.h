@@ -2,6 +2,7 @@
 #define _PROGRAM_H_
 
 #include <shader.h>
+#include <glm/glm.hpp>
 
 using Status = Shader::ShaderStatus;
 
@@ -30,6 +31,24 @@ public:
     void compile();
 
     void deleteProgram();
+
+    void setUniform( std::string  , int  );
+
+    void setUniform( std::string  , float  );
+
+    void setUniform( std::string  , glm::vec2  );
+
+    void setUniform( std::string  , glm::vec3  );
+
+    void setUniform( std::string  , glm::vec4  );
+
+    void setUniform( std::string  , glm::mat2  );
+
+    void setUniform( std::string  , glm::mat3  );
+
+    void setUniform( std::string  , glm::mat4  );
+
+    void setDefine( );
 
 };
 

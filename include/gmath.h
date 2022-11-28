@@ -7,32 +7,23 @@
 
 
 
-// random Vector
-float randFloat( float min = 0.0f , float max = 1.0f );
+float randf(float min = 0.0f, float max = 1.0f);
 
-std::vector< Vector2f > randVector2f( int count , float min = 0.0f , float max = 1.0f );
+glm::vec2 randv2f(float min = 0.0f, float max = 1.0f);
 
-// checkout whether the point in the shape , 2-d condition
+glm::vec3 randv3f(float min=0.0f, float max = 1.0f);
 
-bool pointInLine( Vector2f p , Vector2f start , Vector2f end , float eps = 1e-6 );
+LineSegment* randLine(float min=0.0f, float max=1.0f);
 
-bool pointInPolygon( Vector2f p , std::vector< Vector2f > ps );
+bool isVertical(LineSegment* line);
 
-bool pointInCircle( Vector2f p , Vector2f center , float radius );
+bool getSlope(LineSegment* line, float& k, float& b);
 
-// convex
-// BF algorithm
-// optimization algorithm
+bool isLineSegmentIntersected(LineSegment* l0, LineSegment* l1);
 
-std::vector< Vector2f > getConvex( std::vector< Vector2f > points );
+bool getIntersectedPoint(LineSegment* l0, LineSegment* l1 , glm::vec2 & point );
 
-
-
-// line segment intersection test
-// sweep line algorithm
-
-
-bool isLineSegmentIntersected( LineSegment * l0 , LineSegment * l1 );
+void sweepLineAlgorithm( std::vector< LineSegment * > lineSegments );
 
 
 #endif

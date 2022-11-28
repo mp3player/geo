@@ -18,6 +18,7 @@ add_executable(
     src/avl.cpp
     src/rbtree.cpp
     src/heap.cpp
+    src/tree.cpp
 
     src/gmath.cpp
     src/style.cpp

@@ -273,7 +273,7 @@ int BinaryTree<T , _Comp >::depth( Node * node ){
     return ( lDepth > rDepth ? lDepth : rDepth ) + 1;
 }
 
-// protected
+// protected 
 
 template<typename T , typename _Comp >
 bool BinaryTree<T , _Comp >::find( T value , Node ** result ){
@@ -315,8 +315,8 @@ void BinaryTree<T , _Comp >::preOrder( std::function< void(T) > handler ){
     traverse = [&]( Node * node ){
 
         if( node != nullptr ){
-            std::cout << ( this->depth( node->left ) - this->depth( node->right ) ) << " ";
-            // handler( node->value );
+            // std::cout << node->value << " ";
+            handler( node->value );
             traverse( node->left );
             traverse( node->right );
 
@@ -338,8 +338,8 @@ void BinaryTree<T , _Comp >::inOrder( std::function< void(T) > handler ){
         if( node != nullptr ){
 
             traverse( node->left );
-            // handler( node->value );
-            std::cout << ( this->depth( node->left ) - this->depth( node->right ) ) << " ";
+            handler( node->value );
+            // std::cout << ( this->depth( node->left ) - this->depth( node->right ) ) << " ";
             traverse( node->right );
 
         

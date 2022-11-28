@@ -8,8 +8,8 @@ Color::Color( float r , float g , float b , float a ) : r(r) , g(g) , b(b) , a(a
 
 Style::Style() : color( new Color() ) {}
 
-std::string Style::getType(){
-    return "point";
+Style::StyleType Style::getType(){
+    return POINT;
 }
 
 Style::~Style(){
@@ -20,14 +20,14 @@ Style::~Style(){
 
 PointStyle::PointStyle() : Style() , pointSize( 1.0f ) {}
 
-std::string PointStyle::getType(){
-    return "point";
+Style::StyleType PointStyle::getType(){
+    return POINT;
 }
 
 // line
 
 LineStyle::LineStyle() : Style() , lineWidth( 1.0f ) , closed( false ) {}
 
-std::string LineStyle::getType(){
-    return "line";
+Style::StyleType LineStyle::getType(){
+    return Style::LINE;
 }

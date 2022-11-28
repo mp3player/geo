@@ -17,6 +17,7 @@ public:
         unsigned int vbo;
         int count;
         bool indexed;
+        unsigned int mode;
     };
 
 public:
@@ -53,6 +54,9 @@ private:
     void clearCache( Shape * );
 
     void clearAllCache();
+
+    unsigned int setStyle( Style * );
+
 
 };
 

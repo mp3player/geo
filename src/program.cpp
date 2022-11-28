@@ -1,5 +1,6 @@
 #include <program.h>
 #include <iostream>
+#include <glm/ext.hpp>
 
 
 Program::Program( std::string vpath , std::string fpath ) {
@@ -59,3 +60,50 @@ void Program::deleteProgram(){
     this->setStatus( Shader::DELETED , "deleted" );
 
 }
+
+void Program::setUniform( std::string name , int value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniform1i( location , value );
+}
+
+void Program::setUniform( std::string  name, float value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniform1f( location , value );
+}
+
+void Program::setUniform( std::string name , glm::vec2 value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniform2fv( location , 1 , glm::value_ptr(value) );
+}
+
+void Program::setUniform( std::string name , glm::vec3 value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniform3fv( location , 1 , glm::value_ptr(value) );
+}
+
+void Program::setUniform( std::string name , glm::vec4 value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniform4fv( location , 1 , glm::value_ptr(value) );
+}
+
+void Program::setUniform( std::string name , glm::mat2 value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniformMatrix2fv( location , 1 , GL_FALSE , glm::value_ptr( value ) );
+}
+
+void Program::setUniform( std::string name , glm::mat3 value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniformMatrix3fv( location , 1 , GL_FALSE , glm::value_ptr( value ) );
+}
+
+void Program::setUniform( std::string name , glm::mat4 value ){
+    unsigned int location = glGetUniformLocation( this->program , name.c_str() );
+    glUniformMatrix4fv( location , 1 , GL_FALSE , glm::value_ptr( value ) );
+}
+
+
+
+
+
+
+

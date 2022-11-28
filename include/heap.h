@@ -89,24 +89,25 @@ int  Heap<T , _Comp>::size() const {
 
 template< typename T , typename _Comp >
 bool Heap<T , _Comp>::empty() const {
-    return size == 0;
+    return _size == 0;
 }
 
 template< typename T , typename _Comp >
 bool Heap<T , _Comp>::full() const {
-    return _size == _capacity;
+    return _size >= _capacity;
 }
 
 template< typename T , typename _Comp >
 void Heap<T , _Comp>::expand(){
     // re allocate memory 
-    int __capacity = int( _capacity * 1.5 );
+    int __capacity = int( _capacity * 1.5 ) + 1;
     // copy the value
     T * tmp = datum;
     datum = new T[__capacity];
     for( int i = 0 ; i < _size ; ++ i ){
         datum[i] = tmp[i];
     }
+    this->_capacity = __capacity;
     delete []tmp;
 }
 

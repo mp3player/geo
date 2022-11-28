@@ -13,13 +13,17 @@ struct Color {
 
 struct Style {
 
+    enum StyleType {
+        POINT , LINE , FACE
+    };
+
     Color * color;
     
     explicit Style();
 
     virtual ~Style();
 
-    virtual std::string getType();
+    virtual StyleType getType();
 };
 
 struct PointStyle : Style {
@@ -28,7 +32,7 @@ struct PointStyle : Style {
 
     explicit PointStyle();
 
-    std::string getType();
+    StyleType getType();
 
 };
 
@@ -40,7 +44,7 @@ struct LineStyle : Style {
 
     explicit LineStyle();
 
-    std::string getType();
+    StyleType getType();
 
 };
 
@@ -48,7 +52,7 @@ struct FaceStyle : Style {
 
     explicit FaceStyle();
 
-    std::string getType();
+    StyleType getType();
     
 };
 

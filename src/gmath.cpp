@@ -5,31 +5,38 @@
 #include <stack>
 #include <queue>
 #include <list>
-#include <avl.h>
+#include <heap.h>
 #include <functional>
 #include <algorithm>
+#include <bst.h>
+#include <glm/glm.hpp>
+#include <glm/ext.hpp>
+#include "./tree.cpp"
 
-
-float randFloat(float min , float max){
-    
-    float v = (float)(rand() % 10000) / 10000.0f;
-    return v * (max - min) + min;
+float randf(float min, float max)
+{
+	float v = ( rand() % 10000 ) / 10000.0f;
+	v = v * (max - min) + min;
+	return v;
 }
 
-std::vector< Vector2f > randVector2f( int count , float min , float max ){
-    std::vector< Vector2f > results;
-    for( int i = 0 ; i < count ; ++ i ){
-        float x = randFloat(min , max);
-        float y = randFloat(min , max);
-
-        results.push_back( Vector2f(x,y) );
-    }
-    return results;
+glm::vec2 randv2f(float min, float max)
+{
+	float x = randf(min, max);
+	float y = randf(min, max);
+	return glm::vec2(x, y);
 }
 
-// 
+glm::vec3 randv3f(float min, float max)
+{
+	float x = randf(min, max);
+	float y = randf(min, max);
+	float z = randf(min, max);
+	return glm::vec3(x, y, z);
+}
 
-bool pointInLine( Vector2f p , Vector2f start , Vector2f end , float eps ){
+
+bool pointInLine( glm::vec2 p , glm::vec2 start , glm::vec2 end , float eps ){
     // the line is vertical to the x-axis
     if( start.x == end.x ){
         float minY = start.y < end.y ? start.y : end.y;
@@ -46,69 +53,63 @@ bool pointInLine( Vector2f p , Vector2f start , Vector2f end , float eps ){
     return false;
 }
 
-bool pointInPolygon( Vector2f p , std::vector< Vector2f > ps ){
+bool pointInPolygon( glm::vec2 p , std::vector< glm::vec2 > ps ){
     return true;
 }
 
-bool pointInCircle( Vector2f p , Vector2f center , float radius ){
-    Vector2f dist = p - center;
-    float sLength = dist.squareLength();
+bool pointInCircle( glm::vec2 p , glm::vec2 center , float radius ){
+    glm::vec2 dist = p - center;
+    float sLength = dist.length();
     float sR = radius * radius;
 
     if( sLength < sR ) return true;
     return false;
-
 }
 
-// convex
-// BF algorithm
-// semi-optimization algorithm
+std::vector< glm::vec2 > getConvex( std::vector< glm::vec2 > points ){
 
-std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
-    // BF algorithm pseudo code
-    // test line composed by two point that if it is the edge of the convex to get the border of the convex
-
-    // sort the point => ascending order
-    std::function< bool(Vector2f , Vector2f) > comparer = []( Vector2f a, Vector2f b ){
+    std::function< bool(glm::vec2 , glm::vec2) > comparer = []( glm::vec2 a, glm::vec2 b ){
         if( a.x == b.x && a.y < b.y ) return true;
         if( a.x == b.x && a.y > b.y ) return false;
         return a.x < b.x;
     };
-    std::vector< Vector2f >::iterator begin = points.begin();
-    std::vector< Vector2f >::iterator end = points.end();
+
+    std::vector< glm::vec2 >::iterator begin = points.begin();
+    std::vector< glm::vec2 >::iterator end = points.end();
     
-    std::sort<std::vector<Vector2f>::iterator , std::function< bool(Vector2f , Vector2f) >>( begin , end , comparer );
+    std::sort<std::vector<glm::vec2>::iterator , std::function< bool(glm::vec2 , glm::vec2) >>( begin , end , comparer );
 
     // compute the turning direction
-    std::function< bool( Vector2f , Vector2f , Vector2f ) > turning = [](Vector2f p0 , Vector2f p1 , Vector2f p2){
-        Vector3f p30 = Vector3f(p0);
-        Vector3f p31 = Vector3f(p1);
-        Vector3f p32 = Vector3f(p2);
+    std::function< bool( glm::vec2 , glm::vec2 , glm::vec2 ) > turning = [](glm::vec2 p0 , glm::vec2 p1 , glm::vec2 p2){
+        glm::vec3 p30 = glm::vec3(p0.x,p0.y,1);
+        glm::vec3 p31 = glm::vec3(p1.x,p1.y,1);
+        glm::vec3 p32 = glm::vec3(p2.x,p2.y,1);
 
-        Vector3f v0 = p1 - p0;
-        Vector3f v1 = p2 - p1;
-        Vector3f norm = v0.cross(v1);
+
+        glm::vec3 v0 = p31 - p30;
+        glm::vec3 v1 = p32 - p31;
+        glm::vec3 norm = glm::cross( v0 , v1);
 
         return norm.z > 0;
     };
 
     // the result of the function 
-    std::vector< Vector2f > result = std::vector< Vector2f >();
+    std::vector< glm::vec2 > result = std::vector< glm::vec2 >();
 
     // traverse the whole points to get the half hull
-    std::stack< Vector2f > s ;
+    std::stack< glm::vec2 > s ;
 
     std::function< void(void) > handler = [ & ](){
         while( s.size() >= 3 ){
 
             // test the point in the stach that whether if satisfy the properties
-            Vector2f p2 = s.top();
+            glm::vec2 p2 = s.top();
             s.pop();
 
-            Vector2f p1 = s.top();
+            glm::vec2 p1 = s.top();
             s.pop();
 
-            Vector2f p0 = s.top();
+            glm::vec2 p0 = s.top();
             s.pop();
 
             bool direction = turning( p0 , p1 , p2 );
@@ -148,47 +149,110 @@ std::vector< Vector2f > getConvex( std::vector< Vector2f > points ){
     }
 
     return result;
-
 }
-
-// line segment intersection test
-// sweep line algorithm
 
 bool isLineSegmentIntersected( LineSegment * l0 , LineSegment * l1 ){
     // compute vector 
-    Vector3f v0( l1->upper - l0->lower );
-    Vector3f v1( l0->upper - l1->upper );
-    Vector3f v2( l1->lower - l0->upper );
-    Vector3f v3( l0->lower - l1->lower );
+    glm::vec3 v0( l1->upper - l0->lower , 1.0f );
+    glm::vec3 v1( l0->upper - l1->upper , 1.0f );
+    glm::vec3 v2( l1->lower - l0->upper , 1.0f );
+    glm::vec3 v3( l0->lower - l1->lower , 1.0f );
 
-    Vector3f c0 = v0.cross(v1);
-    Vector3f c1 = v1.cross(v2);
-    Vector3f c2 = v2.cross(v3);
-    Vector3f c3 = v3.cross(v0);
+    glm::vec3 c0 = glm::cross(v0,v1);
+    glm::vec3 c1 = glm::cross(v1,v2);
+    glm::vec3 c2 = glm::cross(v2,v3);
+    glm::vec3 c3 = glm::cross(v3,v0);
 
     float c0z = c0.z ;
     float c1z = c1.z ;
     float c2z = c2.z ;
     float c3z = c3.z ;
-
     if( c0z > 0 && c1z > 0 & c2z > 0 && c3z > 0 || c0z < 0 && c1z < 0 & c2z < 0 && c3z < 0 ){
         return true;
     }
     return false;
-    
 }
 
+LineSegment* randLine(float min, float max)
+{
+    glm::vec2 v0 = randv2f(min, max);
+    glm::vec2 v1 = randv2f(min, max);
+    LineSegment* line = new LineSegment(v0,v1);
+    return line;
+}
 
+bool isVertical(LineSegment* line)
+{
+    glm::vec2 upper = line->upper;
+    glm::vec2 lower = line->lower;
+    return upper.x == lower.x && upper.y != lower.y;
+}
 
+bool getSlope(LineSegment* line, float& k, float& b)
+{
+    glm::vec2 v0 = line->upper;
+    glm::vec2 v1 = line->lower;
+    if (isVertical(line)) return false;
+    k = (v1.y - v0.y) / (v1.x - v0.x);
+    b = v0.y - k * v0.x;
+    return true;
+}
 
+bool getIntersectedPoint(LineSegment* l0, LineSegment* l1 , glm::vec2 & point )
+{
+    if (isVertical(l0) && isVertical(l1)) {
+        std::cout << "vertical" << std::endl;
+        return false;
+    }
+    else if (isVertical(l0)) {
+        float x = l0->upper.x;
+        float k ,b;
+        getSlope(l1,k,b);
+        float y = k * x + b;
+        if (y > l0->upper.y || y < l0->lower.y) {
 
+            return false;
+        }
+        point.x = x;
+        point.y = y;
+        return true;
+    }
+    else {
 
+        // compute slope 
+        float k0, b0, k1, b1;
+        getSlope(l0, k0, b0);
+        getSlope(l1, k1, b1);
+        
+        // l0 and l1 is parallel
+        if (k0 == k1) return false;
 
+        //compute the intersection point 
+        float x = (b1 - b0) / (k0 - k1);
+        float y = (k1 * b0 - k0 * b1) / (k1 - k0);
+        
+        // judge whether the intersection point is on the line segment
+        float l0x0, l0x1, l1x0, l1x1;
+        if (l0->upper.x < l0->lower.x) {
+            l0x0 = l0->upper.x, l0x1 = l0->lower.x;
+        }
+        else {
+            l0x1 = l0->upper.x, l0x0 = l0->lower.x;
+        }
 
-
-
-
-
+        if (l1->upper.x < l1->lower.x) {
+            l1x0 = l1->upper.x, l1x1 = l1->lower.x;
+        }
+        else {
+            l1x1 = l1->upper.x, l1x0 = l1->lower.x;
+        }
+        if (x > l0x0 && x < l0x1 && x > l1x0 && x < l1x1) {
+            point = glm::vec2{ x,y };
+            return true;
+        }
+        return false;
+    }
+}
 
 
 

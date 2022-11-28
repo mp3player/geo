@@ -1,5 +1,6 @@
 #include <window.h>
 #include <iostream>
+#include <functional>
 
 
 Window::Window( int width , int height , int x , int y ) 
@@ -71,25 +72,10 @@ void Window::draw( Shape * shape , Style * style ){
     glUniform1f(hLoc , height);
 
     // style
-    GLenum type = GL_POINTS;
-    
-    if( style->getType() == "line" ){
-
-        LineStyle * lStyle = (LineStyle *)style;
-        type = GL_LINE_STRIP ;// ? lStyle->closed : GL_LINE_STRIP;
-        glLineWidth( lStyle->lineWidth );
-
-    }else{
-        
-        PointStyle * pStyle = (PointStyle *)style;
-        glPointSize(pStyle->pointSize);
-
-    }
-
-
+    unsigned int mode = this->setStyle( style );
 
     glBindVertexArray( data.vao );
-    glDrawArrays( type , 0 , data.count );
+    glDrawArrays( mode , 0 , data.count );
 
     glBindVertexArray(0);
 
@@ -118,7 +104,7 @@ Window::CacheData Window::makeCache( Shape * shape ){
     }
 
     // create buffer
-    std::vector< Vector2f > points = shape->getPoints();
+    std::vector< glm::vec2 > points = shape->getPoints();
     unsigned int vao , vbo ;
     glGenVertexArrays( 1 , &vao );
     glGenBuffers( 1 , &vbo );
@@ -126,9 +112,9 @@ Window::CacheData Window::makeCache( Shape * shape ){
     glBindVertexArray( vao );
     glBindBuffer( GL_ARRAY_BUFFER , vbo );
 
-    glBufferData( GL_ARRAY_BUFFER , points.size() * sizeof(Vector2f) , (void*)(&points.at(0)) , GL_STATIC_DRAW );
+    glBufferData( GL_ARRAY_BUFFER , points.size() * sizeof(glm::vec2) , (void*)(&points.at(0)) , GL_STATIC_DRAW );
 
-    glVertexAttribPointer( 0 , 2 , GL_FLOAT , GL_FALSE , sizeof(Vector2f) , (void*)0);
+    glVertexAttribPointer( 0 , 2 , GL_FLOAT , GL_FALSE , sizeof(glm::vec2) , (void*)0);
     glEnableVertexAttribArray(0);
 
     CacheData data = { vao , vbo , points.size() , false };
@@ -169,3 +155,40 @@ void Window::clearAllCache(){
         
     }
 }
+
+unsigned int Window::setStyle( Style * style ){
+    std::function< void(Program * , Color *)> setColor = [](Program * program , Color * color){
+        glm::vec3 c = glm::vec3(color->r , color->g , color->b);
+        program->setUniform("color" , c);
+    };
+    switch( style->getType() ){
+        case Style::POINT : {
+            PointStyle * pStyle = (PointStyle *)style;
+            glPointSize( pStyle->pointSize );
+            setColor( program , pStyle->color );
+            return GL_POINTS;
+        }break;
+        case Style::LINE : {
+            LineStyle * lStyle = (LineStyle *)style;
+            glLineWidth( lStyle->lineWidth );
+            setColor( program , lStyle->color );
+            if( lStyle->closed ) return GL_LINE_LOOP;
+            return GL_LINE_STRIP;
+        }break;
+        case Style::FACE : {
+            FaceStyle * fStyle = (FaceStyle *)style;
+            return GL_TRIANGLES;
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
